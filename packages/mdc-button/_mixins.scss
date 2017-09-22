@@ -39,19 +39,37 @@
   // :not(:disabled) is used to support link styled as button
   // as link does not support :enabled style
   &:not(:disabled) {
-    @include mdc-theme-prop(background-color, $color);
+    @if type-of($color) == "color" {
+      background-color: $color;
+      background-color: var(--mdc-button-container-fill-color, $color);
+    } @else {
+      background-color: map-get($mdc-theme-property-values, $color);
+      background-color: var(--mdc-button-container-fill-color, map-get($mdc-theme-property-values, $color));
+    }
   }
 }
 
 @mixin mdc-button-stroke-color($color) {
   &:not(:disabled) {
-    @include mdc-theme-prop(border-color, $color);
+    @if type-of($color) == "color" {
+      border-color: $color;
+      border-color: var(--mdc-button-stroke-color, $color);
+    } @else {
+      border-color: map-get($mdc-theme-property-values, $color);
+      border-color: var(--mdc-button-stroke-color, map-get($mdc-theme-property-values, $color));
+    }
   }
 }
 
 @mixin mdc-button-ink-color($color) {
   &:not(:disabled) {
-    @include mdc-theme-prop(color, $color);
+    @if type-of($color) == "color" {
+      color: $color;
+      color: var(--mdc-button-ink-color, $color);
+    } @else {
+      color: map-get($mdc-theme-property-values, $color);
+      color: var(--mdc-button-ink-color, map-get($mdc-theme-property-values, $color));
+    }
   }
 }
 
@@ -65,18 +83,22 @@
 
 @mixin mdc-button-corner-radius($corner-radius) {
   border-radius: $corner-radius;
+  border-radius: var(--mdc-button-corner-radius, $corner-radius);
 }
 
 @mixin mdc-button-stroke-width($stroke-width) {
   border-width: $stroke-width;
+  border-width: var(--mdc-button-stroke-width, $stroke-width);
   // Note: line height is adjusted for stroke button because borders are not
   // considered as space available to text on the Web
   line-height: $mdc-button-height - $stroke-width * 2;
+  line-height: calc(#{$mdc-button-height} - var(--mdc-button-stroke-width, #{$stroke-width}) * 2);
 
   // postcss-bem-linter: ignore
   &.mdc-button--dense {
     // Minus extra 1 to accommodate odd font size of dense button
     line-height: $mdc-dense-button-height - $stroke-width * 2 - 1;
+    line-height: calc(#{$mdc-dense-button-height} - var(--mdc-button-stroke-width, #{$stroke-width}) * 2 - 1);
   }
 }
 
