@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +18,8 @@
 /**
  * @typedef {{
  *   noPrefix: string,
- *   webkitPrefix: string
+ *   webkitPrefix: string,
+ *   styleProperty: string
  * }}
  */
 let VendorPropertyMapType;

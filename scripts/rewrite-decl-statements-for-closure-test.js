@@ -22,7 +22,7 @@
  *  * Rewrite import Foo from './foo' to const Foo = goog.require('mdc.foo')
  *  * Rewrite import {foo, bar} from './util' to const {foo, bar} = goog.require('mdc.util')
  *
- *  
+ *
  * This script rewrites import statements such that:
  *
  * ```js
@@ -138,7 +138,14 @@ function transform(srcFile, rootDir) {
       }
 
       const variableDeclarator = t.variableDeclarator(variableDeclaratorId, callExpression);
-      path.replaceWith(t.variableDeclaration('const', [variableDeclarator]));
+      const variableDeclaration = t.variableDeclaration('const', [variableDeclarator]);
+      // Preserve comments above import statements, since this is most likely the license comment.
+      if (path.node.comments && path.node.comments.length > 0) {
+        const commentValue = path.node.comments[0].value;
+        variableDeclaration.comments = variableDeclaration.comments || [];
+        variableDeclaration.comments.push({type: 'CommentBlock', value: commentValue});
+      }
+      path.replaceWith(variableDeclaration);
     },
   });
 
@@ -156,7 +163,7 @@ function transform(srcFile, rootDir) {
   const packageParts = relativePath.replace('mdc-', '').replace('.js', '').split('/');
   const packageStr = 'mdc.' + packageParts.join('.').replace('.index', '');
 
-  outputCode = 'goog.module(\'' + packageStr + '\')\n' + outputCode;
+  outputCode = 'goog.module(\'' + packageStr + '\');\n' + outputCode;
   fs.writeFileSync(srcFile, outputCode, 'utf8');
   console.log(`[rewrite] ${srcFile}`);
 }

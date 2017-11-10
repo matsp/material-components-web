@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,6 +91,11 @@ class MDCIconToggle extends MDCComponent {
   initialSyncWithDOM() {
     this.on = this.root_.getAttribute(MDCIconToggleFoundation.strings.ARIA_PRESSED) === 'true';
     this.disabled = this.root_.getAttribute(MDCIconToggleFoundation.strings.ARIA_DISABLED) === 'true';
+  }
+
+  /** @return {!MDCRipple} */
+  get ripple() {
+    return this.ripple_;
   }
 
   /** @return {boolean} */
